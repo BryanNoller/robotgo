@@ -1,0 +1,25 @@
+example to build a win64 binary from macOS for github.com/go-vgo/robotgo
+
+
+[prereq]
+go get github.com/go-vgo/robotgo
+copy libz.a to $GOPATH/src/github.com/go-vgo/robotgo/cdeps/win64/
+
+
+[create libz.a]
+brew install mingw-w64
+
+#download zlib sourcecode
+cd zlib-1.2.11
+CC=x86_64-w64-mingw32-gcc ./configure --static
+make
+#let libtool fail, then run
+x86_64-w64-mingw32-ar rcs libz.a *.o
+cp libz.a $GOPATH/src/github.com/go-vgo/robotgo/cdeps/win64/
+
+x86_64-w64-mingw32-objdump -f libz.a
+
+
+[create syso]
+go get github.com/akavel/rsrc
+rsrc -arch amd64 -ico icon.ico -o rsrc.syso
